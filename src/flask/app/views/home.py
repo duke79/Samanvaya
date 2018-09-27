@@ -5,18 +5,12 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 from app import app
+from app.utils.scrape import Scrape
 from app.utils.spider import Spider
 
 
-@app.route('/')
-def home():
-    with Spider() as spider:
-        driver = spider.driver()
-        driver.get("http://www.python.org")
-        assert "Python" in driver.title
-        elem = driver.find_element_by_name("q")
-        elem.clear()
-        elem.send_keys("pycon")
-        elem.send_keys(Keys.RETURN)
-        assert "No results found." not in driver.page_source
-        return "Seriously! What are you looking for? ;)"
+@app.route('/<string:board>/<string:year>/<string:standard>/<string:roll_number>')
+def home(board, year, standard, roll_number):
+    if board == "cbse":
+        return jsonify(Scrape().cbse(roll_number, year=year, standard=standard))
+    return "!"
