@@ -1,0 +1,1 @@
+mysqldump -u root -p --databases samanvaya > app\data\mysql_db.sql
