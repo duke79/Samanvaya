@@ -1,3 +1,6 @@
+import os
+import sys
+
 from app import app
 from flask_cors import CORS, cross_origin
 from app.data.config import Config
