@@ -10,7 +10,7 @@ from app.utils.spider import Spider
 
 
 @app.route('/<string:board>/<string:year>/<string:standard>/<string:roll_number>')
-def home(board, year, standard, roll_number):
+def result(board, year, standard, roll_number):
     if board == "cbse":
         return jsonify(Scrape().cbse(roll_number, year=year, standard=standard))
     return "!"

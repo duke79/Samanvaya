@@ -25,6 +25,7 @@ pyopenssl = "*"
 gunicorn = "*"
 gdom = "*"
 selenium = "*"
+scrapy = "*"
 
 [dev-packages]
 
