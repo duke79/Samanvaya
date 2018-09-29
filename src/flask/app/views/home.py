@@ -9,6 +9,12 @@ from app.utils.scrape import Scrape
 from app.utils.spider import Spider
 
 
+@app.route("/")
+def home():
+    import app.scraper.crawler
+    return "!"
+
+
 @app.route('/<string:board>/<string:year>/<string:standard>/<string:roll_number>')
 def result(board, year, standard, roll_number):
     if board == "cbse":
