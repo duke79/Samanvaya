@@ -15,8 +15,13 @@ def home():
     return "!"
 
 
-@app.route('/<string:board>/<string:year>/<string:standard>/<string:roll_number>')
+@app.route('/result/<string:board>/<string:year>/<string:standard>/<string:roll_number>')
 def result(board, year, standard, roll_number):
     if board == "cbse":
         return jsonify(Scrape().cbse(roll_number, year=year, standard=standard))
     return "!"
+
+
+@app.route('/scholarship/up')
+def scholarship():
+    return jsonify(Scrape().up_scholarship())
