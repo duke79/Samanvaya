@@ -121,6 +121,8 @@ class Scrape():
             password_captcha = driver.find_element_by_css_selector("#ctl00_ContentPlaceHolder1_txtCaptcha")
             # password_captcha.send_keys("") #TODO: Maybe?
 
+            captcha = driver.find_element_by_css_selector("#Captcha").get_attribute("src")
+
             submit = driver.find_element_by_css_selector("#ctl00_ContentPlaceHolder1_btn_submit")
             # submit.click()
 
@@ -128,3 +130,20 @@ class Scrape():
             print(registration_number.text)
 
             return "!"
+
+    def captcha(self):
+        """
+        Ref: https://gist.github.com/chroman/5679049
+        :return:
+        """
+        import cv2.cv as cv
+        import tesseract
+        gray = cv.LoadImage('C:\\Dev\\Samanvaya\\src\\flask\\app\\utils\\captcha.jpg', cv.CV_LOAD_IMAGE_GRAYSCALE)
+        cv.Threshold(gray, gray, 231, 255, cv.CV_THRESH_BINARY)
+        api = tesseract.TessBaseAPI()
+        api.Init(".", "eng", tesseract.OEM_DEFAULT)
+        api.SetVariable("tessedit_char_whitelist", "0123456789abcdefghijklmnopqrstuvwxyz")
+        api.SetPageSegMode(tesseract.PSM_SINGLE_WORD)
+        tesseract.SetCvImage(gray, api)
+        print(api.GetUTF8Text())
+        return "!"

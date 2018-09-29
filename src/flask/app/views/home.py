@@ -25,3 +25,7 @@ def result(board, year, standard, roll_number):
 @app.route('/scholarship/up')
 def scholarship():
     return jsonify(Scrape().up_scholarship())
+
+@app.route('/captcha')
+def captcha():
+    return jsonify(Scrape().captcha())

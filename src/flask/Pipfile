@@ -27,6 +27,8 @@ gdom = "*"
 selenium = "*"
 scrapy = "*"
 "pypiwin32" = "*"
+pytesseract = "*"
+opencv-python = "*"
 
 [dev-packages]
 
