@@ -124,8 +124,10 @@ class Scrape():
             password_captcha = driver.find_element_by_css_selector("#ctl00_ContentPlaceHolder1_txtCaptcha")
             # password_captcha.send_keys("") #TODO: Maybe?
 
-            captcha = driver.find_element_by_css_selector("#Captcha").get_attribute("src")
-            captcha_text = self.captcha(url=captcha)
+            captcha_elem = driver.find_element_by_css_selector("#Captcha")
+            captcha_src = captcha_elem.get_attribute("src")
+            captcha_file = Fetcher().get_captcha(driver, captcha_elem)
+            captcha_text = self.captcha(path=captcha_file)  # url=captcha_elem)
 
             captcha_input = driver.find_element_by_css_selector("#ctl00_ContentPlaceHolder1_txtCaptcha")
             captcha_input.send_keys(captcha_text)
@@ -138,7 +140,7 @@ class Scrape():
 
             return "!"
 
-    def captcha(self, url):
+    def captcha(self, url="", path=""):
         """
         Ref: https://gist.github.com/chroman/5679049
         :return:
@@ -146,7 +148,10 @@ class Scrape():
         import cv2
         import pytesseract
 
-        captcha_path = Fetcher().get_file_from_url(image_url=url)
+        if url:
+            captcha_path = Fetcher().get_file_from_url(image_url=url)
+        else:
+            captcha_path = path
 
         # flag = 1 | 2 | 4
         flag = 1
