@@ -1,3 +1,5 @@
+import os
+
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
 
@@ -136,10 +138,30 @@ class Scrape():
         Ref: https://gist.github.com/chroman/5679049
         :return:
         """
-        import cv2.cv as cv
-        import tesseract
-        gray = cv.LoadImage('C:\\Dev\\Samanvaya\\src\\flask\\app\\utils\\captcha.jpg', cv.CV_LOAD_IMAGE_GRAYSCALE)
-        cv.Threshold(gray, gray, 231, 255, cv.CV_THRESH_BINARY)
+        import cv2
+        import pytesseract as tesseract
+
+        captcha_path = 'C:\\Dev\\Samanvaya\\src\\flask\\app\\utils\\captcha.jpg'
+        # gray = cv2.imread(captcha_path, cv.IMREAD_GRAYSCALE)
+        # cv2.threshold(gray, gray, 231, 255, cv.THRESH_BINARY)
+        image = cv2.imread(captcha_path)
+        cv2.imshow("captcha", image)
+        cv2.waitKey(0)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        cv2.imshow("captcha", gray)
+        cv2.waitKey(0)
+        gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+        cv2.imshow("captcha", gray)
+        cv2.waitKey(0)
+        gray = cv2.medianBlur(gray, 3)
+        cv2.imshow("captcha", gray)
+        cv2.waitKey(0)
+
+        # write the grayscale image to disk as a temporary file so we can
+        # apply OCR to it
+        filename = "{}.png".format(os.getpid())
+        cv2.imwrite(filename, gray)
+
         api = tesseract.TessBaseAPI()
         api.Init(".", "eng", tesseract.OEM_DEFAULT)
         api.SetVariable("tessedit_char_whitelist", "0123456789abcdefghijklmnopqrstuvwxyz")
