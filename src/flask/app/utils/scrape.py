@@ -3,6 +3,7 @@ import os
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
 
+from app.utils.fetcher import Fetcher
 from app.utils.spider import Spider
 
 
@@ -124,6 +125,10 @@ class Scrape():
             # password_captcha.send_keys("") #TODO: Maybe?
 
             captcha = driver.find_element_by_css_selector("#Captcha").get_attribute("src")
+            captcha_text = self.captcha(url=captcha)
+
+            captcha_input = driver.find_element_by_css_selector("#ctl00_ContentPlaceHolder1_txtCaptcha")
+            captcha_input.send_keys(captcha_text)
 
             submit = driver.find_element_by_css_selector("#ctl00_ContentPlaceHolder1_btn_submit")
             # submit.click()
@@ -133,7 +138,7 @@ class Scrape():
 
             return "!"
 
-    def captcha(self):
+    def captcha(self, url):
         """
         Ref: https://gist.github.com/chroman/5679049
         :return:
@@ -141,33 +146,52 @@ class Scrape():
         import cv2
         import pytesseract
 
-        captcha_path = 'C:\\Dev\\Samanvaya\\src\\flask\\app\\utils\\captcha.jpg'
-        # captcha_path = 'C:\\Dev\\Samanvaya\\src\\flask\\app\\utils\\whatsapp.jpeg'
+        captcha_path = Fetcher().get_file_from_url(image_url=url)
+
+        # flag = 1 | 2 | 4
+        flag = 1
+
+        # captcha_path = 'C:\\Dev\\Samanvaya\\src\\flask\\app\\utils\\captcha.jpg'
+        # captcha_path = 'C:\\Dev\\Samanvaya\\src\\flask\\app\\utils\\whatsapp.png'
         # gray = cv2.imread(captcha_path, cv.IMREAD_GRAYSCALE)
         # cv2.threshold(gray, gray, 231, 255, cv.THRESH_BINARY)
         image = cv2.imread(captcha_path)
+        cv2.imwrite("captcha1.png", image)
         # cv2.imshow("captcha", image)
         # cv2.waitKey(0)
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # cv2.imshow("captcha", gray)
-        # cv2.waitKey(0)
-        # gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-        # cv2.imshow("captcha", gray)
-        # cv2.waitKey(0)
-        # gray = cv2.medianBlur(gray, 3)
-        # cv2.imshow("captcha", gray)
-        # cv2.waitKey(0)
+        if flag & 1 == 1:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            cv2.imwrite("captcha2.png", image)
+            # cv2.imshow("captcha", gray)
+            # cv2.waitKey(0)
+        if flag & 2 == 2:
+            image = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+            # image = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY)[1]
+            cv2.imwrite("captcha3.png", image)
+            # cv2.imshow("captcha", gray)
+            # cv2.waitKey(0)
+        if flag & 4 == 4:
+            image = cv2.medianBlur(image, 3)
+            cv2.imwrite("captcha4.png", image)
+            # cv2.imshow("captcha", image)
+            # cv2.waitKey(0)
 
         # write the grayscale image to disk as a temporary file so we can
         # apply OCR to it
         filename = "{}.png".format(os.getpid())
-        cv2.imwrite(filename, gray)
+        cv2.imwrite(filename, image)
 
         # load the image as a PIL/Pillow image, apply OCR, and then delete
         # the temporary file
         from PIL import Image
         image = Image.open(filename)
-        text = pytesseract.image_to_string(image)
+        text = pytesseract.image_to_string(image,
+                                           config=
+                                           '--psm 10'  # 8,9,10, 13
+                                           # '--oem 3 '
+                                           '-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyz'
+                                           # '-c tessedit_char_whitelist=0123456789abcdefghijklmnopqrstuvwxyz'
+                                           )
         os.remove(filename)
         print(text)
 
@@ -177,4 +201,4 @@ class Scrape():
         # api.SetPageSegMode(tesseract.PSM_SINGLE_WORD)
         # tesseract.SetCvImage(gray, api)
         # print(api.GetUTF8Text())
-        return "!"
+        return text
