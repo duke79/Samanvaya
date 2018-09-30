@@ -139,33 +139,42 @@ class Scrape():
         :return:
         """
         import cv2
-        import pytesseract as tesseract
+        import pytesseract
 
         captcha_path = 'C:\\Dev\\Samanvaya\\src\\flask\\app\\utils\\captcha.jpg'
+        # captcha_path = 'C:\\Dev\\Samanvaya\\src\\flask\\app\\utils\\whatsapp.jpeg'
         # gray = cv2.imread(captcha_path, cv.IMREAD_GRAYSCALE)
         # cv2.threshold(gray, gray, 231, 255, cv.THRESH_BINARY)
         image = cv2.imread(captcha_path)
-        cv2.imshow("captcha", image)
-        cv2.waitKey(0)
+        # cv2.imshow("captcha", image)
+        # cv2.waitKey(0)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        cv2.imshow("captcha", gray)
-        cv2.waitKey(0)
-        gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-        cv2.imshow("captcha", gray)
-        cv2.waitKey(0)
-        gray = cv2.medianBlur(gray, 3)
-        cv2.imshow("captcha", gray)
-        cv2.waitKey(0)
+        # cv2.imshow("captcha", gray)
+        # cv2.waitKey(0)
+        # gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+        # cv2.imshow("captcha", gray)
+        # cv2.waitKey(0)
+        # gray = cv2.medianBlur(gray, 3)
+        # cv2.imshow("captcha", gray)
+        # cv2.waitKey(0)
 
         # write the grayscale image to disk as a temporary file so we can
         # apply OCR to it
         filename = "{}.png".format(os.getpid())
         cv2.imwrite(filename, gray)
 
-        api = tesseract.TessBaseAPI()
-        api.Init(".", "eng", tesseract.OEM_DEFAULT)
-        api.SetVariable("tessedit_char_whitelist", "0123456789abcdefghijklmnopqrstuvwxyz")
-        api.SetPageSegMode(tesseract.PSM_SINGLE_WORD)
-        tesseract.SetCvImage(gray, api)
-        print(api.GetUTF8Text())
+        # load the image as a PIL/Pillow image, apply OCR, and then delete
+        # the temporary file
+        from PIL import Image
+        image = Image.open(filename)
+        text = pytesseract.image_to_string(image)
+        os.remove(filename)
+        print(text)
+
+        # api = tesseract.TessBaseAPI()
+        # api.Init(".", "eng", tesseract.OEM_DEFAULT)
+        # api.SetVariable("tessedit_char_whitelist", "0123456789abcdefghijklmnopqrstuvwxyz")
+        # api.SetPageSegMode(tesseract.PSM_SINGLE_WORD)
+        # tesseract.SetCvImage(gray, api)
+        # print(api.GetUTF8Text())
         return "!"
