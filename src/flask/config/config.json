@@ -1,26 +1,27 @@
 {
-    "server": {
-        "host": "0.0.0.0",
-        "port": "80"
+  "server": {
+    "host": "0.0.0.0",
+    "port": "80"
+  },
+  "database": {
+    "active": "postgres",
+    "mysql": {
+      "db": "dummy_db",
+      "user": "dummy_user",
+      "host": "localhost",
+      "password": "dummy_password"
     },
-    "database": {
-        "mysql": {
-            "db": "dummy_db",
-            "user": "dummy_user",
-            "host": "localhost",
-            "password": "dummy_password"
-        },
-        "postgres": {
-            "db": "dummy_db",
-            "user": "dummy_user",
-            "host": "localhost",
-            "password": "dummy_password"
-        }
-    },
-    "debug": false,
-    "stacktrace": false,
-    "allowed_domains": [
-        "http://1",
-        "http://2"
-    ]
+    "postgres": {
+      "db": "dummy_db",
+      "user": "dummy_user",
+      "host": "localhost",
+      "password": "dummy_password"
+    }
+  },
+  "debug": false,
+  "stacktrace": false,
+  "allowed_domains": [
+    "http://1",
+    "http://2"
+  ]
 }
