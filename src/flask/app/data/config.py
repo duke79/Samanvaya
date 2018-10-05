@@ -16,9 +16,10 @@ class Config(dict, metaclass=Singleton):
         dict.__init__(self, dict())  # Because dict is extended
 
         # Open src/flask/config/config.json
-        file_dir = os.path.abspath(__file__)
-        flask_dir = os.path.dirname(os.path.dirname(os.path.dirname(file_dir)))
-        self.config_dir = os.path.join(flask_dir, "config")
+        # file_dir = os.path.abspath(__file__)
+        # flask_dir = os.path.dirname(os.path.dirname(os.path.dirname(file_dir)))
+        # self.config_dir = os.path.join(flask_dir, "config")
+        self.config_dir = os.path.join(os.path.expanduser("~"), ".samanvaya")
         self.config_file = os.path.join(self.config_dir, "config.json")
 
         # create config.json and initialize empty self.config
@@ -86,6 +87,13 @@ class Config(dict, metaclass=Singleton):
                 "user": "dummy_user",
                 "host": "localhost",
                 "password": "dummy_password"
+            },
+            "postgres": {
+                "db": "dummy_db",
+                "user": "dummy_user",
+                "host": "localhost",
+                "password": "dummy_password",
+                "port": "5432"
             },
         }
         self.config["debug"] = False

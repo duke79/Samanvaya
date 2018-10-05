@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression
 
@@ -13,9 +15,3 @@ class MarksheetCBSE(db.Model):
     name_father = db.Column(db.String(200), nullable=True)
     name_mother = db.Column(db.String(200), nullable=True)
     d_o_b = db.Column(db.Date, nullable=False)
-    created_at = db.Column(db.TIMESTAMP(), nullable=False,
-                           server_default=db.text('CURRENT_TIMESTAMP'))
-    updated_at = db.Column(db.TIMESTAMP(), nullable=False,
-                           server_default=db.text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
-                           )
-    # children = relationship("user_categories")

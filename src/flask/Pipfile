@@ -29,6 +29,7 @@ scrapy = "*"
 "pypiwin32" = "*"
 pytesseract = "*"
 opencv-python = "*"
+"psycopg2" = "*"
 
 [dev-packages]
 
