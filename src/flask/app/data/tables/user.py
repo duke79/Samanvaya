@@ -18,9 +18,11 @@ class User(db.Model):
     if db_type == DBType.sqlite or db_type == DBType.mysql:
         marksheet_10 = db.Column(db.String, nullable=True)
         marksheet_12 = db.Column(db.String, nullable=True)
+        marksheet_grad = db.Column(db.String, nullable=True)
     if db_type == DBType.postgres:
         marksheet_10 = db.Column(JSONB, nullable=True)
         marksheet_12 = db.Column(JSONB, nullable=True)
+        marksheet_grad = db.Column(JSONB, nullable=True)
 
     __table_args__ = (UniqueConstraint('name', 'phone_number', 'email', name='uix_1'),)
 
