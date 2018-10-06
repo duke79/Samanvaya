@@ -30,6 +30,7 @@ scrapy = "*"
 pytesseract = "*"
 opencv-python = "*"
 "psycopg2" = "*"
+flask-migrate = "*"
 
 [dev-packages]
 
