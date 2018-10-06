@@ -1,3 +1,4 @@
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression
@@ -20,5 +21,7 @@ class User(db.Model):
     if db_type == DBType.postgres:
         marksheet_10 = db.Column(JSONB, nullable=True)
         marksheet_12 = db.Column(JSONB, nullable=True)
+
+    __table_args__ = (UniqueConstraint('name', 'phone_number', 'email', name='uix_1'),)
 
     # children = relationship("user_categories")
