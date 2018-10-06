@@ -25,7 +25,7 @@ def result(board, year, standard, roll_number):
         try:
             json_data = json.dumps(ret)
             # json_data = ret
-            user = User(json_data=json_data)
+            user = User(marksheet_10=json_data)
             user = user.save()
         except TypeError as e:
             print_exception_traces(e)
