@@ -1,3 +1,4 @@
+import json
 import os
 
 from flask import request, jsonify
@@ -22,7 +23,9 @@ def result(board, year, standard, roll_number):
     if board == "cbse":
         ret = Scrape().cbse(roll_number, year=year, standard=standard)
         try:
-            user = User(json_data=ret)
+            json_data = json.dumps(ret)
+            # json_data = ret
+            user = User(json_data=json_data)
             user = user.save()
         except TypeError as e:
             print_exception_traces(e)
